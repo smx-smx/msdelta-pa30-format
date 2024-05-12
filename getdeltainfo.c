@@ -5,8 +5,16 @@
 
 static uint64_t read_uint64_LE(const unsigned char *buf)
 {
-  return (buf[0]) | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24) |
-         ((uint64_t)((buf[4]) | (buf[5] << 8) | (buf[6] << 16) | (buf[7] << 24)) << 32);
+  return (0
+    | (((uint64_t)buf[0] <<  0) & 0x00000000000000FFLL)
+    | (((uint64_t)buf[1] <<  8) & 0x000000000000FF00LL)
+    | (((uint64_t)buf[2] << 16) & 0x0000000000FF0000LL)
+    | (((uint64_t)buf[3] << 24) & 0x00000000FF000000LL)
+    | (((uint64_t)buf[4] << 32) & 0x000000FF00000000LL)
+    | (((uint64_t)buf[5] << 40) & 0x0000FF0000000000LL)
+    | (((uint64_t)buf[6] << 48) & 0x00FF000000000000LL)
+    | (((uint64_t)buf[7] << 56) & 0xFF00000000000000LL)
+  );
 }
 
 int dpa_GetDeltaInfo(const dpa_span_t *input, dpa_header_info_t *ret, dpa_extra_info_t *ret_extra)

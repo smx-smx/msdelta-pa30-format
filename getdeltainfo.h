@@ -13,7 +13,7 @@ typedef struct {
   int64_t FileTypeSet;
   int64_t FileType;
   int64_t Flags;
-  size_t TargetSize;
+  uint32_t TargetSize;
   uint64_t TargetFileTime;
   uint32_t TargetHashAlgId;
   dpa_hash_t TargetHash;
