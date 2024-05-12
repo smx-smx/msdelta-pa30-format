@@ -19,18 +19,26 @@ int dpa_GetDeltaInfo(const dpa_span_t *input, dpa_header_info_t *ret, dpa_extra_
     return 0;
   }
 
-  if (memcmp(input->buf, "PA30", 4) != 0) {
-    if (memcmp(input->buf, "PA19", 4) == 0) {
+  unsigned n_read = 0;
+
+  // detect and skip manifest magic
+  if(memcmp(input->buf, "DCM\x01", 4) == 0){
+    n_read += 4;
+  }
+
+  if (memcmp(input->buf + n_read, "PA30", 4) != 0) {
+    if (memcmp(input->buf + n_read, "PA19", 4) == 0) {
       fprintf(stderr, "Not Implemented: fallback of PA19 files to legacy format\n");
     }
     fprintf(stderr, "Error: Expected PA30 signature\n"); // TODO? elsewhere / error code?
     return 0;
   }
-
-  ret->TargetFileTime = read_uint64_LE(input->buf + 4);
+  n_read += 4;
+  ret->TargetFileTime = read_uint64_LE(input->buf + n_read);
+  n_read += 8;
 
   dpa_bitreader_t br;
-  if (!dpa_bitreader_init(&br, input->buf + 12, input->len - 12)) {
+  if (!dpa_bitreader_init(&br, input->buf + n_read, input->len - n_read)) {
     return 0;
   }
 
