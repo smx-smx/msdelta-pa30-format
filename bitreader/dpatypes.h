@@ -5,6 +5,6 @@
 
 typedef struct {
   const unsigned char *buf;
-  size_t len;
+  uint32_t len;
 } dpa_span_t;
 

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
 // 100-nanosecond units since the start of January 1, 1601.
 // time_t
 uint32_t filetime_to_unix(uint64_t ft)
@@ -124,7 +125,7 @@ static int dump_patch(const unsigned char *buf, size_t len, size_t dst_size)
   size_t next_block = 0;
   size_t next_block_start = dec->params[0].start;   // = 0; // TODO?  (esp. when  srcSize > 0 ?)
 
-  uint32_t lru[3] = {};  // (note: unlike lzx delta, init to 0)
+  size_t lru[3] = {};  // (note: unlike lzx delta, init to 0)
   size_t opos = 0;    // FIXME:  srcSize  -> buf.size() of input after preprocessing ...
   while (br.fill > 0) { // (else assert(br.pos == br.in.len): no op will have read all 57 bit after a _fill)
     while (opos >= next_block_start) { // NOTE: safe for opos >= dst_size.
@@ -224,7 +225,7 @@ int main(int argc, char **argv)
          "  FileTypeSet: 0x%016llx\n"
          "  FileType: 0x%016llx\n"
          "  Flags: 0x%016llx\n"
-         "  TargetSize: %zd\n"
+         "  TargetSize: %u\n"
          "  TargetFileTime: 0x%016llx (unix: %d)\n"
          "  TargetHashAlgId: 0x%08x\n"
          "  TargetHash:\n"
